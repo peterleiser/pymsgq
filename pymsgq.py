@@ -21,6 +21,7 @@ from __future__ import unicode_literals
 
 import ctypes
 import os
+import sys
 import platform
 import errno
 import logging
@@ -36,6 +37,10 @@ IPC_NOWAIT=2048
 IPC_STAT=2
 IPC_SET=1
 MSG_NOERROR=4096
+
+# not available in python3
+unicode = str if sys.version_info.major == 3 else unicode
+
 #msgqbuf
 def _msgbuf(size):
     class __msgbuf(ctypes.Structure):
@@ -107,7 +112,7 @@ class Msgq(object):
                 return -1
             if eno == errno.EINTR:
                 return -2
-            raise Exception('send msgq error:%s' % os.strerror(cyptes.get_errno()))
+            raise Exception('send msgq error:%s' % os.strerror(ctypes.get_errno()))
         return err
 
     def recv(self, mtype=0, flags=IPC_NOWAIT):
