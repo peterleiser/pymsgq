@@ -21,9 +21,10 @@ from __future__ import unicode_literals
 
 import ctypes
 import os
+import platform
 import errno
 import logging
-libc=ctypes.CDLL('libc.so.6',use_errno=True)
+libc=ctypes.CDLL("libc.{}".format("so.6" if platform.uname()[0] != "Darwin" else "dylib"),use_errno=True)
 _msgget = libc.msgget
 _msgsnd = libc.msgsnd
 _msgrcv = libc.msgrcv
